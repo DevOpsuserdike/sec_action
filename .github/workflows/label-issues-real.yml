@@ -9,12 +9,17 @@ jobs:
     steps:
       - name: Assign label
         if: contains(github.event.issue.title, 'bug')
-        run: |
-          curl -X POST \
-          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \
-          -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          -H 'content-type: application/json' \
-          -d '{
-              "labels": ["bug"]
-            }' \
-          --fail
+        run: gh issue edit "$NUMBER" --add-label "$LABELS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          LABELS: bug
+#          curl -X POST \
+#          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \
+#          -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+#          -H 'content-type: application/json' \
+#          -d '{
+#              "labels": ["bug"]
+#            }' \
+#          --fail
